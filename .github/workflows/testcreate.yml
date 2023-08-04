@@ -53,6 +53,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y testkube
 
+      - name: Set testkube CLI context
+        run: |
+          testkube set context -c cloud -e tkcenv_dcee157c15412139 -o tkcorg_4c516f0b01a6cdeb -k tkcapi_90c235c9d55796d32a028c106dd297
+
       - name: Installing repositories
         run: |
           helm repo add kubeshop https://kubeshop.github.io/helm-charts
