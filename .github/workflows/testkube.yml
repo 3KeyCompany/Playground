@@ -91,4 +91,7 @@ jobs:
         env:
           YAML_MANIFEST: ${{ steps.generate_crds.outputs.result }}
         run: |
-          echo "${YAML_MANIFEST}"
+          echo "${YAML_MANIFEST}" > tests.yaml
+          kubectl apply -f tests.yaml
+          sleep 120
+          
