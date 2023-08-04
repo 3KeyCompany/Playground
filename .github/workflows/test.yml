@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install snapd
+          sudo apt-get install -y snapd
           sudo snap install core
           
       - name: Create microk8s cluster
