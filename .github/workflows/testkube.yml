@@ -83,7 +83,8 @@ jobs:
           command: generate
           resource: tests-crds
           namespace: testkube
-          parameters: ${{ github.workspace }}/tests/.
+          stdin: ${{ github.workspace }}/tests/.
+          # parameters: ${{ github.workspace }}/tests/.
 
       # Use the output from the `Create test` step
       - name: Get the output result
