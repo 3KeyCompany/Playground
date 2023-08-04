@@ -53,9 +53,20 @@ jobs:
           helm repo update
 
       # Run Helm delpoy/upgrade of the Testkube release on cluster
+      # - name: Deploy
+      #   run: |-
+      #     helm upgrade --install --atomic --timeout 180s testkube kubeshop/testkube --namespace testkube --create-namespace
       - name: Deploy
         run: |-
-          helm upgrade --install --atomic --timeout 180s testkube kubeshop/testkube --namespace testkube --create-namespace
+          helm upgrade --install --reuse-values --create-namespace testkube kubeshop/testkube \
+            --set testkube-api.cloud.key=tkcagnt_9a5a621211ab895a295237c23b7c8f \
+            --set testkube-api.cloud.orgId=tkcorg_4c516f0b01a6cdeb \
+            --set testkube-api.cloud.envId=tkcenv_dcee157c15412139 \
+            --set testkube-api.minio.enabled=false \
+            --set mongodb.enabled=false \
+            --set testkube-dashboard.enabled=false \
+            --set testkube-api.cloud.url=agent.testkube.io:443 \
+            --namespace testkube
 
       # Creating test
       - name: Create test
