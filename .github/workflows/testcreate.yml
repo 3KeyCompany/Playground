@@ -1,0 +1,100 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI with testkube create
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  # push:
+  #   branches: [ "master" ]
+  # pull_request:
+  #   branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # runs-on: k8s-runner
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+      - name: Create microk8s cluster
+        uses: balchua/microk8s-actions@v0.3.0
+        with:
+          channel: '1.26/stable'
+          addons: '["dns", "rbac", "ingress"]'
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.10.0
+
+      - name: Installing repositories
+        run: |
+          helm repo add kubeshop https://kubeshop.github.io/helm-charts
+          helm repo update
+      # Run Helm delpoy/upgrade of the Testkube release on cluster
+      # - name: Deploy
+      #   run: |-
+      #     helm upgrade --install --atomic --timeout 180s testkube kubeshop/testkube --namespace testkube --create-namespace
+      - name: Deploy
+        run: |-
+          helm upgrade --install --reuse-values --create-namespace testkube kubeshop/testkube \
+            --set testkube-api.cloud.key=tkcagnt_9a5a621211ab895a295237c23b7c8f \
+            --set testkube-api.cloud.orgId=tkcorg_4c516f0b01a6cdeb \
+            --set testkube-api.cloud.envId=tkcenv_dcee157c15412139 \
+            --set testkube-api.minio.enabled=false \
+            --set mongodb.enabled=false \
+            --set testkube-dashboard.enabled=false \
+            --set testkube-api.cloud.url=agent.testkube.io:443 \
+            --namespace testkube
+      # - name: Init testkube
+      #   id: init_testkube
+      #   uses: kubeshop/testkube-docker-action@v1
+      #   with:
+      #     command: init
+      #     namespace: testkube
+
+      # Creating test
+      - name: Create test
+        id: create_test
+        uses: kubeshop/testkube-docker-action@v1
+        with:
+          command: create
+          resource: test
+          namespace: testkube
+          # stdin: ${{ github.workspace }}/tests/.
+          parameters: "--type curl --name curl-test --file ${{ github.workspace }}/tests/curl.json"
+
+      # Use the output from the `Create test` step
+      - name: Get the output result
+        env:
+          YAML_MANIFEST: ${{ steps.generate_crds.outputs.result }}
+        run: |
+          echo "${YAML_MANIFEST}"
+
+      - name: Run test
+        id: run_test
+        uses: kubeshop/testkube-docker-action@v1
+        with:
+          command: run
+          resource: test
+          namespace: testkube
+          parameters: "curl-test"
