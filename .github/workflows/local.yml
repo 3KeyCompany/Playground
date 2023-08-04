@@ -46,7 +46,7 @@ jobs:
 
       - name: Init testkube
         run: |
-          testkube init --no-confirm
+          testkube init --no-confirm --no-dashboard --no-minio --no-mongo --values testkube/values.yaml
           
       # - name: Set testkube CLI context
       #   run: |
