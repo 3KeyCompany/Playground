@@ -88,7 +88,7 @@ jobs:
       - name: Create test
         id: create_test
         run: |
-          testkube create test --type curl --name curl-test --file ${{ github.workspace }}/tests/curl.json
+          testkube create test --type curl/test --name curl-test --file ${{ github.workspace }}/tests/curl.json
           
         # uses: kubeshop/testkube-docker-action@v1
         # with:
