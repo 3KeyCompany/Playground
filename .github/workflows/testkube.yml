@@ -76,8 +76,8 @@ jobs:
       #     namespace: testkube
 
       # Creating test
-      - name: Create test
-        id: create_test
+      - name: Generate CRDs
+        id: generate_crds
         uses: kubeshop/testkube-docker-action@v1
         with:
           command: generate
@@ -88,6 +88,7 @@ jobs:
 
       # Use the output from the `Create test` step
       - name: Get the output result
+        env:
+          YAML_MANIFEST: ${{ steps.generate_crds.outputs.result }}
         run: |
-          result="${{ steps.create_test.outputs.result }}"
-          echo '$result'
+          echo "${YAML_MANIFEST}"
