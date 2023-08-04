@@ -84,7 +84,7 @@ jobs:
           resource: tests-crds
           namespace: testkube
           # stdin: ${{ github.workspace }}/tests/.
-          parameters: ${{ github.workspace }}/tests/curl.json
+          parameters: tests/curl.json
 
       # Use the output from the `Create test` step
       - name: Get the output result
