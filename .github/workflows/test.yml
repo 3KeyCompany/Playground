@@ -30,6 +30,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y snapd
+          sleep 120
 
       - name: Create microk8s cluster
         uses: balchua/microk8s-actions@v0.3.0
