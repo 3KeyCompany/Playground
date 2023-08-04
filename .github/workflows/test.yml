@@ -28,12 +28,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt update
-          sudo apt install -y snapd
-          sleep 120
-
+          sudo apt-get update
+          sudo apt-get install snapd
+          sudo snap install core
+          
       - name: Create microk8s cluster
-        uses: balchua/microk8s-actions@v0.3.0
+        uses: balchua/microk8s-actions@v0.3.2
         with:
           channel: '1.26/stable'
           addons: '["dns", "rbac", "ingress"]'
