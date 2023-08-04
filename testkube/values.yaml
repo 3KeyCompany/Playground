@@ -1,7 +1,7 @@
 testkube-api:
   minio:
     enabled: false 
-mongodb:
-  enabled: false
+#mongodb:
+#  enabled: false
 testkube-dashboard:
   enabled: false
