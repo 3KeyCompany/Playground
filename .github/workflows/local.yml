@@ -46,7 +46,7 @@ jobs:
 
       - name: Init testkube
         run: |
-          testkube init
+          testkube init --no-confirm
           
       # - name: Set testkube CLI context
       #   run: |
