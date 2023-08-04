@@ -1,0 +1,10 @@
+testkube-api:
+  service:
+    port:	30010
+    type: "NodePort"
+  minio:
+    enabled: false 
+mongodb:
+  enabled: false
+testkube-dashboard:
+  enabled: false
