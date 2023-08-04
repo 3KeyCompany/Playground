@@ -93,5 +93,13 @@ jobs:
         run: |
           echo "${YAML_MANIFEST}" > tests.yaml
           kubectl apply -f tests.yaml
-          sleep 120
+          #sleep 120
           
+      # Running test
+      - name: Run test
+        id: run_test
+        uses: kubeshop/testkube-docker-action@v1
+        with:
+          command: run
+          resource: test
+          parameters: "curl"
