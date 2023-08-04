@@ -84,7 +84,7 @@ jobs:
       - name: Create test
         id: create_test
         run: |
-          testkube create test --type curl/test --name curl-test --file ${{ github.workspace }}/tests/curl.json
+          testkube create test --type curl/test --name curl-test --file tests/curl.json
 
       - name: Run test
         id: run_test
