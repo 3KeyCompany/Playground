@@ -30,7 +30,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y snapd
-          sudo snap install core
+          sudo systemctl start snapd.service
+          #sudo snap install core
           
       - name: Create microk8s cluster
         uses: balchua/microk8s-actions@v0.3.2
