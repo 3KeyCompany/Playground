@@ -1,6 +1,4 @@
 testkube-api:
-  service:
-    type: "NodePort"
   minio:
     enabled: false 
 mongodb:
