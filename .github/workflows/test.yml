@@ -30,7 +30,9 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y snapd
-          sudo systemctl start snapd.service
+          sudo systemctl restart snapd.socket
+          sudo systemctl restart snapd
+          sudo snap set system refresh.hold="$(date --date='today+60 days' +%Y-%m-%dT%H:%M:%S%:z)"
           #sudo snap install core
           
       - name: Create microk8s cluster
