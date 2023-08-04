@@ -46,10 +46,18 @@ jobs:
         with:
           version: v3.10.0
 
+      - name: Install testkube CLI
+        run: |
+          wget -qO - https://repo.testkube.io/key.pub | sudo apt-key add -
+          echo "deb https://repo.testkube.io/linux linux main" | sudo tee -a /etc/apt/sources.list
+          sudo apt-get update
+          sudo apt-get install -y testkube
+
       - name: Installing repositories
         run: |
           helm repo add kubeshop https://kubeshop.github.io/helm-charts
           helm repo update
+          
       # Run Helm delpoy/upgrade of the Testkube release on cluster
       # - name: Deploy
       #   run: |-
@@ -75,26 +83,32 @@ jobs:
       # Creating test
       - name: Create test
         id: create_test
-        uses: kubeshop/testkube-docker-action@v1
-        with:
-          command: create
-          resource: test
-          namespace: testkube
-          # stdin: ${{ github.workspace }}/tests/.
-          parameters: "--type curl --name curl-test --file ${{ github.workspace }}/tests/curl.json"
+        run: |
+          testkube create test --type curl --name curl-test --file ${{ github.workspace }}/tests/curl.json
+          
+        # uses: kubeshop/testkube-docker-action@v1
+        # with:
+        #   command: create
+        #   resource: test
+        #   namespace: testkube
+        #   # stdin: ${{ github.workspace }}/tests/.
+        #   parameters: "--type curl --name curl-test --file ${{ github.workspace }}/tests/curl.json"
 
       # Use the output from the `Create test` step
-      - name: Get the output result
-        env:
-          YAML_MANIFEST: ${{ steps.generate_crds.outputs.result }}
-        run: |
-          echo "${YAML_MANIFEST}"
+      # - name: Get the output result
+      #   env:
+      #     YAML_MANIFEST: ${{ steps.generate_crds.outputs.result }}
+      #   run: |
+      #     echo "${YAML_MANIFEST}"
 
       - name: Run test
         id: run_test
-        uses: kubeshop/testkube-docker-action@v1
-        with:
-          command: run
-          resource: test
-          namespace: testkube
-          parameters: "curl-test"
+        run: |
+          testkube run test curl-test
+          sleep 60
+        # uses: kubeshop/testkube-docker-action@v1
+        # with:
+        #   command: run
+        #   resource: test
+        #   namespace: testkube
+        #   parameters: "curl-test"
