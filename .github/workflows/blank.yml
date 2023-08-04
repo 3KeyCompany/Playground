@@ -34,11 +34,21 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-
-      - name: Run test
-        id: run_test
-        uses: kubeshop/testkube-docker-action@v1
+      
+      - name: Run my-test
+        uses: kubeshop/testkube-run-action@v1
         with:
-          command: run
-          resource: test
-          parameters: my-test
+          # Instance
+          organization: tkcorg_cd98974363da5c34
+          environment: tkcenv_11b64ab6c44a3e65
+          token: tkcapi_c07d305e241d4fd04e311c30f02f8f
+          # Options
+          test: my-test
+
+      # - name: Run test
+      #   id: run_test
+      #   uses: kubeshop/testkube-docker-action@v1
+      #   with:
+      #     command: run
+      #     resource: test
+      #     parameters: my-test
