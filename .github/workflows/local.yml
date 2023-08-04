@@ -47,7 +47,7 @@ jobs:
       - name: Init testkube
         run: |
           testkube init --no-confirm --values testkube/values.yaml
-          kubectl -n testkube wait --for=condition=Ready pods -l app.kubernetes.io/name=api-server --timeout=90s
+          kubectl -n testkube wait --for=condition=Ready pods -l app.kubernetes.io/name=api-server --timeout=300s
           
       # - name: Set testkube CLI context
       #   run: |
