@@ -30,7 +30,7 @@ jobs:
       # Run Helm delpoy/upgrade of the Testkube release on a microk8s cluster
       - name: Deploy
         run: |-
-          helm upgrade --install --atomic --timeout 180s testkube kubeshop/testkube --namespace testkube --create-namespace
+          helm upgrade --install --atomic --timeout 600s testkube kubeshop/testkube --namespace testkube --create-namespace
 
       # Generate tests
       - name: Generate CRDs
