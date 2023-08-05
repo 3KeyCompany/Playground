@@ -47,7 +47,7 @@ jobs:
         run: |
           kubectl get all -n testkube
           mkdir -p ~/.kube
-          microk8s config > ~/.kube/config
+          sudo microk8s config > ~/.kube/config
           ls -la
           cat .kube/config
           export KUBE_CONFIG_PATH=~/.kube/config
