@@ -48,6 +48,8 @@ jobs:
           kubectl get all -n testkube
           ls -la
           cat .kube/config
+          export KUBE_CONFIG_PATH=~/.kube/config
+          export KUBECONFIG=~/.kube/config
 
       # Use the output from the `Generate tests` step
       - name: Get the output result
