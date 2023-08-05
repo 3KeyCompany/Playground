@@ -46,13 +46,11 @@ jobs:
       - name: Checks
         run: |
           kubectl get all -n testkube
-          mkdir -p ~/.kube
-          sudo microk8s config > ~/.kube/config
-          sudo chown -R runner: ~/.kube
+          mkdir -p ${{ github.workspace }}/.kube
+          sudo microk8s config > ${{ github.workspace }}/.kube/config
+          sudo chown -R runner: ${{ github.workspace }}/.kube
           ls -la
           cat .kube/config
-          export KUBE_CONFIG_PATH=~/.kube/config
-          export KUBECONFIG=~/.kube/config
 
       # Use the output from the `Generate tests` step
       - name: Get the output result
@@ -67,6 +65,9 @@ jobs:
       - name: Run test
         id: run_test
         uses: kubeshop/testkube-docker-action@v1
+        env:
+          KUBECONFIG: ${{ github.workspace }}/.kube/config
+          KUBERNETES_MASTER: ${{ github.workspace }}/.kube/config
         with:
           command: run
           resource: test
