@@ -5,5 +5,5 @@
     "-H",
     "'Accept: application/json'"
   ],
-  "expected_status": "200"
+  "expected_status": "400"
 }
