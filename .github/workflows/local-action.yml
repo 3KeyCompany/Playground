@@ -17,6 +17,12 @@ jobs:
           channel: '1.26/stable'
           addons: '["dns", "rbac", "ingress", "hostpath-storage"]'
 
+      - name: Prepare local kubectl context
+        run: |
+          mkdir -p ${{ github.workspace }}/.kube
+          sudo microk8s config > ${{ github.workspace }}/.kube/config
+          sudo chown -R runner: ${{ github.workspace }}/.kube
+
       - name: Set up Helm
         uses: azure/setup-helm@v3
         with:
@@ -43,15 +49,6 @@ jobs:
           # stdin: ${{ github.workspace }}/tests/.
           parameters: tests/curl.json
 
-      - name: Checks
-        run: |
-          kubectl get all -n testkube
-          mkdir -p ${{ github.workspace }}/.kube
-          sudo microk8s config > ${{ github.workspace }}/.kube/config
-          sudo chown -R runner: ${{ github.workspace }}/.kube
-          ls -la
-          cat .kube/config
-
       # Use the output from the `Generate tests` step
       - name: Get the output result
         env:
@@ -66,7 +63,7 @@ jobs:
         id: run_test
         uses: kubeshop/testkube-docker-action@v1
         env:
-          KUBECONFIG: ${{ github.workspace }}/.kube/config
+          #KUBECONFIG: ${{ github.workspace }}/.kube/config
           KUBERNETES_MASTER: ${{ github.workspace }}/.kube/config
         with:
           command: run
