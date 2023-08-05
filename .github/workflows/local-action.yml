@@ -43,6 +43,12 @@ jobs:
           # stdin: ${{ github.workspace }}/tests/.
           parameters: tests/curl.json
 
+      - name: Checks
+        run: |
+          kubect get all -n testkube
+          ls -la
+          cat .kube/config
+
       # Use the output from the `Generate tests` step
       - name: Get the output result
         env:
