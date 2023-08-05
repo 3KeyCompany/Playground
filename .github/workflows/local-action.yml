@@ -1,0 +1,63 @@
+name: Local action
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Create microk8s cluster
+        uses: balchua/microk8s-actions@v0.3.0
+        with:
+          channel: '1.26/stable'
+          addons: '["dns", "rbac", "ingress"]'
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.11.1
+      
+      - name: Installing repositories
+        run: |
+          helm repo add kubeshop https://kubeshop.github.io/helm-charts
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+      
+      # Run Helm delpoy/upgrade of the Testkube release on a microk8s cluster
+      - name: Deploy
+        run: |-
+          helm upgrade --install --atomic --timeout 180s testkube kubeshop/testkube --namespace testkube --create-namespace
+
+      # Generate tests
+      - name: Generate CRDs
+        id: generate_crds
+        uses: kubeshop/testkube-docker-action@v1
+        with:
+          command: generate
+          resource: tests-crds
+          namespace: testkube
+          # stdin: ${{ github.workspace }}/tests/.
+          parameters: tests/curl.json
+
+      # Use the output from the `Generate tests` step
+      - name: Get the output result
+        env:
+          YAML_MANIFEST: ${{ steps.generate_crds.outputs.result }}
+        run: |
+          echo "${YAML_MANIFEST}" > tests.yaml
+          kubectl apply -f tests.yaml
+          #sleep 120
+          
+      # Running test
+      - name: Run test
+        id: run_test
+        uses: kubeshop/testkube-docker-action@v1
+        with:
+          command: run
+          resource: test
+          parameters: curl
+          
