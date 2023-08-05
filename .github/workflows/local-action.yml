@@ -45,7 +45,7 @@ jobs:
 
       - name: Checks
         run: |
-          kubect get all -n testkube
+          kubectl get all -n testkube
           ls -la
           cat .kube/config
 
