@@ -63,8 +63,8 @@ jobs:
         id: run_test
         uses: kubeshop/testkube-docker-action@v1
         env:
-          #KUBECONFIG: ${{ github.workspace }}/.kube/config
-          KUBERNETES_MASTER: ${{ github.workspace }}/.kube/config
+          KUBECONFIG: ${{ github.workspace }}/.kube/config
+          #KUBERNETES_MASTER: ${{ github.workspace }}/.kube/config
         with:
           command: run
           resource: test
