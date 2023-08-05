@@ -68,5 +68,5 @@ jobs:
         with:
           command: run
           resource: test
-          parameters: curl
+          parameters: curl -f
           
