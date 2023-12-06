@@ -55,4 +55,4 @@ jobs:
     steps:
       - name: Print variables
         run: |
-          echo "${{ needs.test.outputs.tests.sample-test }}"
+          echo '${{ needs.test.outputs.tests.sample-test }}'
