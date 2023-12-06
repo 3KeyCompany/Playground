@@ -13,7 +13,7 @@ jobs:
           - 'sample-test'
 
     outputs:
-      tests: ${{ steps.load_variables.outputs }}
+      tests: ${{ steps.load_variables.outputs.sample-test }}
 
     steps:
       # Checks-out only the content of the test folder
@@ -55,4 +55,4 @@ jobs:
     steps:
       - name: Print variables
         run: |
-          echo "${{ needs.test.outputs.tests }}
+          echo "${{ needs.test.outputs.tests.sample-test }}
