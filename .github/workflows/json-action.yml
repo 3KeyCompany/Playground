@@ -32,7 +32,11 @@ jobs:
 
       - name: Load testing variables
         id: load_variables
+        env:
+          EXITING_JSON: ${{ env.sample-test }}
         run: |
+          echo $sample-test
+          
           echo "Loading JSON variables:"
           json=$(cat ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json)
           
