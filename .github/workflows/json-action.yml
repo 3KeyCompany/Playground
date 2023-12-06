@@ -12,6 +12,9 @@ jobs:
         test-folder:
           - 'sample-test'
 
+    outputs:
+      tests: ${{ steps.load_variables.outputs.json }}
+
     steps:
       # Checks-out only the content of the test folder
       - uses: actions/checkout@v4
@@ -19,13 +22,25 @@ jobs:
           sparse-checkout: ${{ matrix.test-folder }}
           sparse-checkout-cone-mode: false
 
+      - name: Create JSON definition for testing
+        run: |
+          echo '{"test": []}' | jq . > test.json
+
       - name: Load testing variables
         id: load_variables
         run: |
           echo "Loading JSON variables:"
           json=$(cat ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json)
           
-          echo "${{ matrix.test-folder }}<<EOF" >> $GITHUB_OUTPUT
+          echo "$(jq '.test += ["${{ matrix.test-folder }}"]' test.json)" > test.json
+          echo "$(jq '. += $json' test.json)" > test.json
+          
+          echo '${{ steps.load_variables.outputs.json }}' > output.json
+          jq -s '.[0] * .[1]' test.json output.json > test.json
+          
+          json=$(cat test.json)
+          
+          echo "json<<EOF" >> $GITHUB_OUTPUT
           echo "$json" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
@@ -51,4 +66,4 @@ jobs:
     steps:
       - name: Print variables
         run: |
-          echo '${{ needs.test.outputs.tests.sample-test }}'
+          echo '${{ needs.test.outputs.tests }}'
