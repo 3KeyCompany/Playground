@@ -40,7 +40,7 @@ jobs:
           
           # load variables into environment
           while read p; do
-            echo "$p" >> "$GITHUB_OUTPUT"
+            echo "$p" >> $GITHUB_ENV
           done < ${{ github.workspace }}/${{ inputs.test-folder }}/variables
 
       - name: Trigger test workflow
