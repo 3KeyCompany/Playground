@@ -53,7 +53,7 @@ jobs:
 
       - name: Load testing variables
         run: |
-          ls -la ${{ github.workspace }}
+          ls -la ${{ github.workspace }}/test
           echo "Loading variables:"
           cat ${{ github.workspace }}/test/variables
           
