@@ -18,6 +18,10 @@ jobs:
 #          echo "Running tests in ${{ matrix.test-folder }}"
   workflow:
     runs-on: ubuntu-latest
+
+    outputs:
+      K8S_CLUSTER: ${{ steps.load_variables.outputs.K8S_CLUSTER }}
+
     strategy:
       matrix:
         test-folder:
@@ -32,13 +36,14 @@ jobs:
           sparse-checkout-cone-mode: false
 
       - name: Load testing variables
+        id: load_variables
         run: |
           echo "Loading variables:"
           cat ${{ github.workspace }}/${{ inputs.test-folder }}/variables
           
           # load variables into environment
           while read p; do
-            echo "$p" >> $GITHUB_ENV
+            echo "$p" >> "$GITHUB_OUTPUT"
           done < ${{ github.workspace }}/${{ inputs.test-folder }}/variables
 
   reusable-workflow:
@@ -52,4 +57,4 @@ jobs:
     needs: workflow
     with:
       test-folder: ${{ matrix.test-folder }}
-      K8S_CLUSTER: ${{ env.K8S_CLUSTER }}
+      K8S_CLUSTER: ${{ needs.workflow.outputs.K8S_CLUSTER }}
