@@ -1,0 +1,24 @@
+name: Master test action
+
+on:
+  workflow_dispatch:
+
+env:
+  TEST_FOLDERS: "{
+  \"test-folder\":
+    [
+      \"sample-test\",
+      \"sample\"
+    ]
+  }"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJSON(env.TEST_FOLDERS) }}
+
+    steps:
+      - name: Running the tests
+        run: |
+          echo "Running tests in ${{ matrix.test-folder }}"
