@@ -50,6 +50,9 @@ jobs:
               repo: 'Playground',
               workflow_id: 'reusable-test-action.yml',
               ref: 'master',
+              inputs: {
+                  test-folder: '${{ matrix.test-folder }}'
+              }
             })
 
 #  reusable-workflow:
