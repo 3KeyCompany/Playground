@@ -13,6 +13,27 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:${{ fromJson(inputs.test-folder).include[0].project }}
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: czertainlyuser
+          POSTGRES_PASSWORD: your-strong-password
+          POSTGRES_DB: czertainlydb
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        volumes:
+          - ${{ github.workspace }}/initdb:/docker-entrypoint-initdb.d
+
     steps:
       - name: From JSON
         run: |
