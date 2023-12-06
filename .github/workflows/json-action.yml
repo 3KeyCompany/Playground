@@ -14,6 +14,7 @@ jobs:
 
     outputs:
       tests: ${{ steps.load_variables.outputs.sample-test }}
+      sample: ${{ steps.load_variables.outputs.sample }}
 
     steps:
       # Checks-out only the content of the test folder
@@ -32,6 +33,8 @@ jobs:
           while read p; do
             echo "${{ matrix.test-folder }}=$p" >> "$GITHUB_OUTPUT"
           done < ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json
+          
+          echo "sample=value" >> "$GITHUB_OUTPUT"
 
 #      - name: Trigger test workflow
 #        uses: actions/github-script@v7
@@ -55,4 +58,5 @@ jobs:
     steps:
       - name: Print variables
         run: |
-          echo '${{ needs.test.outputs.tests.sample-test }}'
+          echo '${{ needs.test.outputs.tests }}'
+          echo '${{ needs.test.outputs.sample }}'
