@@ -1,4 +1,4 @@
-name: Sample action
+name: Sample Testkube action
 
 on:
   workflow_dispatch:
