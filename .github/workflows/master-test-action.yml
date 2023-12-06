@@ -51,7 +51,7 @@ jobs:
               workflow_id: 'reusable-test-action.yml',
               ref: 'master',
               inputs: {
-                  test-folder: 'test'
+                'test-folder': 'test'
               }
             })
 
