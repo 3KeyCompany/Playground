@@ -33,7 +33,7 @@ jobs:
       - name: Load testing variables
         id: load_variables
         env:
-          EXITING_JSON: ${{ env.sample-test }}
+          EXITING_JSON: ${{ env.json }}
         run: |
           echo $sample-test
           
