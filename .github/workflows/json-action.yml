@@ -14,7 +14,8 @@ jobs:
           - 'sample-test-2'
 
     outputs:
-      tests: ${{ steps.load_variables.outputs.json }}
+      sample-test: ${{ steps.load_variables.outputs.sample-test }}
+      sample-test-2: ${{ steps.load_variables.outputs.sample-test-2 }}
 
     steps:
       # Checks-out only the content of the test folder
@@ -35,8 +36,6 @@ jobs:
         env:
           EXITING_JSON: ${{ env.json }}
         run: |
-          echo "${json}"
-          
           echo "Loading JSON variables:"
           json=$(cat ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json)
           
@@ -47,10 +46,6 @@ jobs:
           echo "$json"
           
           echo "$(jq '. += {"${{ matrix.test-folder }}":'$json'}' test.json)" > test.json
-          
-          cat test.json
-          
-          echo $GITHUB_ENV
            
           # jq -s '.[0] * .[1]' test.json output.json > test.json
           
@@ -58,15 +53,9 @@ jobs:
           
           echo "$json"
           
-          echo "json<<EOF" >> $GITHUB_ENV
-          echo "$json" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          
-          # echo "json<<EOF" >> $GITHUB_OUTPUT
-          # echo "$json" >> $GITHUB_OUTPUT
-          # echo "EOF" >> $GITHUB_OUTPUT
-          
-          echo $GITHUB_ENV
+          echo "${{ matrix.test-folder }}<<EOF" >> $GITHUB_OUTPUT
+          echo "$json" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
 #      - name: Trigger test workflow
 #        uses: actions/github-script@v7
@@ -87,7 +76,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
 
+    strategy:
+      matrix:
+        test-folder:
+          - 'sample-test'
+          - 'sample-test-2'
+
     steps:
       - name: Print variables
         run: |
-          echo '${{ needs.test.outputs.tests }}'
+          echo '${{ needs.test.outputs.${{ matrix.test-folder }} }}'
