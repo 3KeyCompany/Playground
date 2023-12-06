@@ -51,8 +51,8 @@ jobs:
               workflow_id: 'reusable-test-action.yml',
               ref: 'master',
               inputs: {
-                  test-folder: '${{ matrix.test-folder }}'
-              },
+                  test-folder: 'test'
+              }
             })
 
 #  reusable-workflow:
