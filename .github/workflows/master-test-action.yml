@@ -3,14 +3,14 @@ name: Master test action
 on:
   workflow_dispatch:
 
-env:
-  TEST_FOLDERS: "{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
-
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(env.TEST_FOLDERS) }}
+      matrix:
+        test-folder:
+         - 'sample-test'
+         - 'sample-test2'
 
     steps:
       - name: Running the tests
