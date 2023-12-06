@@ -52,7 +52,7 @@ jobs:
               ref: 'master',
               inputs: {
                   test-folder: '${{ matrix.test-folder }}'
-              }
+              },
             })
 
 #  reusable-workflow:
