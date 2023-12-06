@@ -18,6 +18,6 @@ jobs:
           echo "Running tests in ${{ matrix.test-folder }}"
           
       - name: Run new workflow
-        uses: ./.github/workflows/reusable-workflow.yml@master
+        uses: 3keycompany/Playground/.github/workflows/reusable-workflow.yml@master
         with:
           test-folder: ${{ matrix.test-folder }}
