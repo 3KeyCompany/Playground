@@ -31,8 +31,14 @@ jobs:
           
           # load variables into environment
           while read p; do
-            echo "${{ matrix.test-folder }}=$p"
-            echo "${{ matrix.test-folder }}=$p" >> "$GITHUB_OUTPUT"
+            #echo "${{ matrix.test-folder }}=$p"
+          
+            # multiline output
+            echo "${{ matrix.test-folder }}<<EOF" >> "$GITHUB_OUTPUT"
+            echo "$p" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+            
+            #echo "${{ matrix.test-folder }}=$p" >> "$GITHUB_OUTPUT"
           done < ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json
           
           echo "sample=value" >> "$GITHUB_OUTPUT"
