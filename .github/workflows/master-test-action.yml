@@ -33,12 +33,12 @@ jobs:
         id: load_variables
         run: |
           echo "Loading variables:"
-          cat ${{ github.workspace }}/${{ inputs.test-folder }}/variables
+          cat ${{ github.workspace }}/${{ matrix.test-folder }}/variables
           
           # load variables into environment
           while read p; do
             echo "$p" >> $GITHUB_ENV
-          done < ${{ github.workspace }}/${{ inputs.test-folder }}/variables
+          done < ${{ github.workspace }}/${{ matrix.test-folder }}/variables
 
       - name: Trigger test workflow
         uses: actions/github-script@v7
@@ -51,7 +51,7 @@ jobs:
               workflow_id: 'reusable-test-action.yml',
               ref: 'master',
               inputs: {
-                test-folder: ${{ inputs.test-folder }}
+                test-folder: ${{ matrix.test-folder }}
               }
             })
 
