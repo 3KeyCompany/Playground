@@ -46,7 +46,7 @@ jobs:
           
           cat test.json
           
-          echo ${{ test.outputs.tests }}
+          echo $GITHUB_OUTPUT
            
           # jq -s '.[0] * .[1]' test.json output.json > test.json
           
@@ -58,7 +58,7 @@ jobs:
           echo "$json" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
           
-          echo ${{ test.outputs.tests }}
+          echo $GITHUB_OUTPUT
 
 #      - name: Trigger test workflow
 #        uses: actions/github-script@v7
