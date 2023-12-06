@@ -12,6 +12,9 @@ jobs:
         test-folder:
           - 'sample-test'
 
+    outputs:
+      tests: ${{ steps.load_variables.outputs }}
+
     steps:
       # Checks-out only the content of the test folder
       - uses: actions/checkout@v4
@@ -27,7 +30,7 @@ jobs:
           
           # load variables into environment
           while read p; do
-            echo "${{ matrix.test-folder }}=$p" >> $GITHUB_ENV
+            echo "${{ matrix.test-folder }}=$p" >> "$GITHUB_OUTPUT"
           done < ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json
 
 #      - name: Trigger test workflow
@@ -52,4 +55,4 @@ jobs:
     steps:
       - name: Print variables
         run: |
-          echo "${{ env.sample-test }}"
+          echo "${{ needs.test.outputs.tests }}
