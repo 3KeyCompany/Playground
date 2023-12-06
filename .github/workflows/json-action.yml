@@ -85,4 +85,5 @@ jobs:
     steps:
       - name: Print variables
         run: |
+          echo "Sample test: fromJSON('${{ needs.test.outputs.sample-test }}')"
           echo '${{ needs.test.outputs }}'
