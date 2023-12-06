@@ -46,18 +46,33 @@ jobs:
             echo "$p" >> "$GITHUB_OUTPUT"
           done < ${{ github.workspace }}/${{ inputs.test-folder }}/variables
 
-  reusable-workflow:
-    strategy:
-      matrix:
-        test-folder:
-          - 'sample-test'
-          - 'sample-test2'
+      - name: Trigger test workflow
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: '3KeyCompany',
+              repo: 'Playground',
+              workflow_id: 'reusable-test-action.yml',
+              ref: 'master',
+              inputs: {
+                test-folder: ${{ inputs.test-folder }}
+              }
+            })
 
-    env:
-      K8S_CLUSTER: ${{ needs.workflow.outputs.K8S_CLUSTER }}
-
-    uses: 3KeyCompany/Playground/.github/workflows/reusable-test-action.yml@master
-    needs: workflow
-    with:
-      test-folder: ${{ matrix.test-folder }}
-      K8S_CLUSTER: ${{ env.K8S_CLUSTER }}
+#  reusable-workflow:
+#    strategy:
+#      matrix:
+#        test-folder:
+#          - 'sample-test'
+#          - 'sample-test2'
+#
+#    env:
+#      K8S_CLUSTER: ${{ needs.workflow.outputs.K8S_CLUSTER }}
+#
+#    uses: 3KeyCompany/Playground/.github/workflows/reusable-test-action.yml@master
+#    needs: workflow
+#    with:
+#      test-folder: ${{ matrix.test-folder }}
+#      K8S_CLUSTER: ${{ env.K8S_CLUSTER }}

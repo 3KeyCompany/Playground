@@ -1,7 +1,7 @@
 name: Reusable test action
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       test-folder:
         type: string
