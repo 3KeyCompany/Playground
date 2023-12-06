@@ -16,20 +16,31 @@ jobs:
 #      - name: Running the tests
 #        run: |
 #          echo "Running tests in ${{ matrix.test-folder }}"
+#  reusable-workflow:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        test-folder:
+#          - 'sample-test'
+#          - 'sample-test2'
+#
+#    steps:
+#      # Checks-out only the content of the test folder
+#      - uses: actions/checkout@v4
+#
+#      - name: Local Action Call
+#        id: local-action
+#        uses: 3KeyCompany/Playground/.github/workflows/reusable-test-action.yml
+#        with:
+#          test-folder: ${{ matrix.test-folder }}
+
   reusable-workflow:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         test-folder:
           - 'sample-test'
           - 'sample-test2'
 
-    steps:
-      # Checks-out only the content of the test folder
-      - uses: actions/checkout@v4
-
-      - name: Local Action Call
-        id: local-action
-        uses: ./.github/workflows/reusable-test-action.yml
-        with:
-          test-folder: ${{ matrix.test-folder }}
+    uses: 3KeyCompany/Playground/.github/workflows/reusable-test-action.yml@master
+    with:
+      test-folder: ${{ matrix.test-folder }}
