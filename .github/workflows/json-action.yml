@@ -7,7 +7,7 @@ on:
         type: string
         description: 'Test folder to run'
         required: true
-        default: '{"test-folder": "sample-test"}'
+        default: "{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
 
 jobs:
   test:
