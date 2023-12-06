@@ -8,6 +8,8 @@ on:
         description: 'Test folder to run'
         required: true
 
+run-name: Run test action - ${{ inputs.test-folder }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
