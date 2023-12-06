@@ -49,6 +49,7 @@ jobs:
         with:
           sparse-checkout: ${{ inputs.test-folder }}
           sparse-checkout-cone-mode: false
+          path: ${{ github.workspace }}
 
       - name: Load testing variables
         run: |
