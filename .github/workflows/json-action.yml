@@ -14,7 +14,6 @@ jobs:
 
     outputs:
       tests: ${{ steps.load_variables.outputs.sample-test }}
-      sample: ${{ steps.load_variables.outputs.sample }}
 
     steps:
       # Checks-out only the content of the test folder
@@ -27,21 +26,11 @@ jobs:
         id: load_variables
         run: |
           echo "Loading JSON variables:"
-          cat ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json
+          json=$(cat ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json)
           
-          # load variables into environment
-          while read p; do
-            #echo "${{ matrix.test-folder }}=$p"
-          
-            # multiline output
-            echo "${{ matrix.test-folder }}<<EOF" >> $GITHUB_OUTPUT
-            echo "$p" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-            
-            #echo "${{ matrix.test-folder }}=$p" >> "$GITHUB_OUTPUT"
-          done < ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json
-          
-          echo "sample=value" >> "$GITHUB_OUTPUT"
+          echo "${{ matrix.test-folder }}<<EOF" >> $GITHUB_OUTPUT
+          echo "$json" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
 #      - name: Trigger test workflow
 #        uses: actions/github-script@v7
