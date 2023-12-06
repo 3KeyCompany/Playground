@@ -1,0 +1,18 @@
+apiVersion: tests.testkube.io/v3
+kind: Test
+metadata:
+  name: czertainly-auth-test
+  namespace: testkube
+  labels:
+    executor: postman-executor
+    test-type: postman-collection
+spec:
+  type: postman/collection
+  content:
+    type: string
+    data: "{\n\t\"info\": {\n\t\t\"_postman_id\": \"a08b6c2b-e52b-483b-97a5-3351f0cc0b5d\",\n\t\t\"name\": \"_CZERTAINLY TESTS\",\n\t\t\"schema\": \"https://schema.getpostman.com/json/collection/v2.1.0/collection.json\"\n\t},\n\t\"item\": [\n\t\t{\n\t\t\t\"name\": \"Test Auth Profile\",\n\t\t\t\"event\": [\n\t\t\t\t{\n\t\t\t\t\t\"listen\": \"test\",\n\t\t\t\t\t\"script\": {\n\t\t\t\t\t\t\"exec\": [\n\t\t\t\t\t\t\t\"pm.test(\\\"Status code is 200\\\", function () {\",\n\t\t\t\t\t\t\t\"    pm.expect(pm.response.code).to.eql(200);\",\n\t\t\t\t\t\t\t\"});\",\n\t\t\t\t\t\t\t\"\",\n\t\t\t\t\t\t\t\"pm.test(\\\"Role is superadmin\\\", function () {\",\n\t\t\t\t\t\t\t\"    const responseJson = pm.response.json();\",\n\t\t\t\t\t\t\t\"    pm.expect(responseJson.roles[0].name).to.eql('superadmin');\",\n\t\t\t\t\t\t\t\"});\"\n\t\t\t\t\t\t],\n\t\t\t\t\t\t\"type\": \"text/javascript\"\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"request\": {\n\t\t\t\t\"auth\": {\n\t\t\t\t\t\"type\": \"noauth\"\n\t\t\t\t},\n\t\t\t\t\"method\": \"GET\",\n\t\t\t\t\"header\": [\n\t\t\t\t\t{\n\t\t\t\t\t\t\"key\": \"ssl-client-cert\",\n\t\t\t\t\t\t\"value\": \"{{cert}}\",\n\t\t\t\t\t\t\"type\": \"default\"\n\t\t\t\t\t}\n\t\t\t\t],\n\t\t\t\t\"url\": {\n\t\t\t\t\t\"raw\": \"http://api-gateway-service:8000/api/v1/auth/profile\",\n\t\t\t\t\t\"protocol\": \"http\",\n\t\t\t\t\t\"host\": [\n\t\t\t\t\t\t\"api-gateway-service.czertainly\"\n\t\t\t\t\t],\n\t\t\t\t\t\"port\": \"8000\",\n\t\t\t\t\t\"path\": [\n\t\t\t\t\t\t\"api\",\n\t\t\t\t\t\t\"v1\",\n\t\t\t\t\t\t\"auth\",\n\t\t\t\t\t\t\"profile\"\n\t\t\t\t\t]\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"response\": []\n\t\t}\n\t]\n}"
+  executionRequest:
+    args:
+      - "--env-var"
+      - "cert=LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURQVENDQWlVQ0ZCZCtkZlF1bGV5NWo0TWV0WDNpZXd2SXhIWkRNQTBHQ1NxR1NJYjNEUUVCQ3dVQU1GMHgKQ3pBSkJnTlZCQVlUQWtOYU1SQXdEZ1lEVlFRSURBZERlbVZqYUdsaE1Rc3dDUVlEVlFRSERBSkRRakVOTUFzRwpBMVVFQ2d3RU0wdEZXVEVNTUFvR0ExVUVDd3dEUkVWV01SSXdFQVlEVlFRRERBbHNiMk5oYkdodmMzUXdIaGNOCk1qQXdPVEkxTVRFMU5EVTNXaGNOTXpBd09EQTBNVEUxTkRVM1dqQlpNUXN3Q1FZRFZRUUdFd0pEV2pFUU1BNEcKQTFVRUNBd0hRM3BsWTJocFlURUxNQWtHQTFVRUJ3d0NRMEl4Q3pBSkJnTlZCQW9NQWtOR01Rd3dDZ1lEVlFRTApEQU5FUlZZeEVEQU9CZ05WQkFNTUIwTk1TVVZPVkRFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3CmdnRUtBb0lCQVFDL1NzTys5SXpRODV4eHlpVCtvdThSRE54Wk1QMEphOFlLcmR1MTlCVEZqeUx0VkxwYitJMVgKcXpsWEZkSmNPYllaNVpib3lBTEIwMGk1RHMwVFRzOHlkZ0VlYXcwSzJPOTZEbkdoNHo1cjRxTHVGK2ZwVlIrMwpBOGtLUlNycUpOMUpOUEZlYitOS3NpbFVOdng1cGxaQm01K1ZUZDY0U29wNnIxREFMRURCUzhBeFJKU2dwNHgvCm9DcStUNHpMaDlYRHlWVVE2OGF4TGdGODZzUzRZY0JZS1FWVEg3S3dSeCtGR1BGbkJxdDJsbDJJaGVySjFOMWQKaGVYZExxelBZWSt1SWhzNTV3VVBSaFFpYmppSmhNOU5nTVlzbU9QWlJ6c1BJcjYrZ1VpbDgycm1TZnlNZy9BMAp3VDRkc202TVQ3bHk2UFBSeXhvUnZoTnZmbjk2RnNDUkFnTUJBQUV3RFFZSktvWklodmNOQVFFTEJRQURnZ0VCCkFJK1lOUjgybjIzcDkwMTR3YSs5OWFFV0pmdWpsaXJZMDdqaEFRbXNHVGtrRk01UVROSnp3aTZWWW5Vd2psSk0KT1h3OGZFaUJWUkhVaXlMVjVSV1pHaUdadUxkQ1pnWUNqdHpDdFd1T1BpZFNoQUs1R3BMRGlwRzl1cForUkNOcApCWFZiYjZKNXRFSTBlc1RTeFovandqMkpxWlpheWhSbVJYTC9qOHZHUm43NGF0VElMZUZ3VUlZc1NyZW9NSTh3CkcxUmswcXVlMDlMZ1AxUm1DaVNsMUdVU1RML2xySy9kWWF3MG9yWndVeHpLZy9LTm5UWXByWWlBSVZSc0hVejgKYmtkNm1HRUJDZkRkcEVwMGw3bGFCZWoyUjhSaEdEd3V4am1hMVpyd2xDc0tMbHBkbjJsd3pxSUVjK1psN2R4aQpMVGIxTkxNSDgwZjRMQ3VGMWlGQ0Q2RT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+    executePostRunScriptBeforeScraping: false
