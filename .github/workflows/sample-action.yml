@@ -1,4 +1,4 @@
-name: Local action
+name: Sample action
 
 on:
   workflow_dispatch:
