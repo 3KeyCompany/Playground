@@ -85,4 +85,4 @@ jobs:
     steps:
       - name: Print variables
         run: |
-          echo '${{ needs.test.outputs.${{ matrix.test-folder }} }}'
+          echo '${{ needs.test.outputs[format("%s", matrix.test-folder)] }}'
