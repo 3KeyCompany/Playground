@@ -4,18 +4,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        test-folder:
-         - 'sample-test'
-         - 'sample-test2'
-
-    steps:
-      - name: Running the tests
-        run: |
-          echo "Running tests in ${{ matrix.test-folder }}"
+#  test:
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        test-folder:
+#         - 'sample-test'
+#         - 'sample-test2'
+#
+#    steps:
+#      - name: Running the tests
+#        run: |
+#          echo "Running tests in ${{ matrix.test-folder }}"
 
   reusable-workflow:
     strategy:
@@ -24,6 +24,6 @@ jobs:
           - 'sample-test'
           - 'sample-test2'
 
-    uses: ./.github/workflows/reusable-workflow.yml@master
+    uses: 3keycompany/Playground/.github/workflows/reusable-workflow.yml@master
     with:
       test-folder: ${{ matrix.test-folder }}
