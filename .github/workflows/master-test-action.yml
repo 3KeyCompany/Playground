@@ -16,23 +16,30 @@ jobs:
 #      - name: Running the tests
 #        run: |
 #          echo "Running tests in ${{ matrix.test-folder }}"
-#  reusable-workflow:
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        test-folder:
-#          - 'sample-test'
-#          - 'sample-test2'
-#
-#    steps:
-#      # Checks-out only the content of the test folder
-#      - uses: actions/checkout@v4
-#
-#      - name: Local Action Call
-#        id: local-action
-#        uses: 3KeyCompany/Playground/.github/workflows/reusable-test-action.yml
-#        with:
-#          test-folder: ${{ matrix.test-folder }}
+  workflow:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test-folder:
+          - 'sample-test'
+          - 'sample-test2'
+
+    steps:
+      # Checks-out only the content of the test folder
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ${{ inputs.test-folder }}
+          sparse-checkout-cone-mode: false
+
+      - name: Load testing variables
+        run: |
+          echo "Loading variables:"
+          cat ${{ github.workspace }}/${{ inputs.test-folder }}/variables
+          
+          # load variables into environment
+          while read p; do
+            echo "$p" >> $GITHUB_ENV
+          done < ${{ github.workspace }}/${{ inputs.test-folder }}/variables
 
   reusable-workflow:
     strategy:
@@ -42,5 +49,7 @@ jobs:
           - 'sample-test2'
 
     uses: 3KeyCompany/Playground/.github/workflows/reusable-test-action.yml@master
+    needs: workflow
     with:
       test-folder: ${{ matrix.test-folder }}
+      K8S_CLUSTER: ${{ env.K8S_CLUSTER }}
