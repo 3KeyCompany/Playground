@@ -33,12 +33,19 @@ jobs:
           json=$(cat ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json)
           
           echo "$(jq '.test += ["${{ matrix.test-folder }}"]' test.json)" > test.json
-          echo "$(jq '. += $json' test.json)" > test.json
+          
+          cat test.json
+          
+          echo "$(jq '. += "'$json'"' test.json)" > test.json
+          
+          cat test.json
           
           echo '${{ steps.load_variables.outputs.json }}' > output.json
           jq -s '.[0] * .[1]' test.json output.json > test.json
           
           json=$(cat test.json)
+          
+          echo "$json"
           
           echo "json<<EOF" >> $GITHUB_OUTPUT
           echo "$json" >> $GITHUB_OUTPUT
