@@ -11,6 +11,7 @@ jobs:
       matrix:
         test-folder:
           - 'sample-test'
+          - 'sample-test-2'
 
     outputs:
       tests: ${{ steps.load_variables.outputs.json }}
@@ -24,7 +25,10 @@ jobs:
 
       - name: Create JSON definition for testing
         run: |
-          echo '{"test": []}' | jq . > test.json
+          if [ ! -f /tmp/foo.txt ]; then
+            echo '{"test": []}' | jq . > test.json
+          fi
+          
 
       - name: Load testing variables
         id: load_variables
@@ -38,19 +42,11 @@ jobs:
           json=$(echo $json | jq -r tostring)
           echo "$json"
           
-          echo "$(jq '. += '$json'' test.json)" > test.json
+          echo "$(jq '. += {"${{ matrix.test-folder }}":'$json'}' test.json)" > test.json
           
           cat test.json
-          
-          echo "json<<EOF" >> $GITHUB_OUTPUT
-          echo "$json" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          
-          echo '${{ steps.load_variables.outputs.json }}' > output.json
-          
-          cat output.json
-          
-          jq -s '.[0] * .[1]' test.json output.json > test.json
+           
+          # jq -s '.[0] * .[1]' test.json output.json > test.json
           
           json=$(cat test.json)
           
