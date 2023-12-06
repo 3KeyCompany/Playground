@@ -1,0 +1,75 @@
+name: Sample action
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out only the content of the sample-test folder
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            sample-test
+
+      - name: Load testing variables
+        run: |
+          echo "Loading variables:"
+          cat ${{ github.workspace }}/sample-test/variables
+          
+          # load variables into environment
+          while read p; do
+            echo "$p" >> $GITHUB_ENV
+          done < ${{ github.workspace }}/sample-test/variables
+
+      - name: Create k8s cluster
+        if : env.K8S_CLUSTER == 'microk8s'
+        uses: balchua/microk8s-actions@v0.3.0
+        with:
+          channel: '1.26/stable'
+          addons: '["dns", "rbac", "ingress", "hostpath-storage"]'
+
+      - name: Prepare local kubectl context
+        run: |
+          mkdir -p ${{ github.workspace }}/.kube
+          sudo microk8s config > ${{ github.workspace }}/.kube/config
+          sudo chown -R runner: ${{ github.workspace }}/.kube
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: v3.11.1
+
+      - name: Installing Helm repositories
+        run: |
+          helm repo add kubeshop https://kubeshop.github.io/helm-charts
+
+      - name: Deploy Testkube using Helm
+        run: |-
+          helm upgrade --install --atomic --timeout 600s testkube kubeshop/testkube --namespace testkube --create-namespace
+
+      - name: Create Testkube CRDs
+        run: |
+          kubectl apply -f ${{ github.workspace }}/sample-test/test-crds/
+
+      # Running test
+      #- name: Run tests
+      #  id: run_test
+      #  uses: kubeshop/testkube-docker-action@v1
+      #  env:
+      #    KUBECONFIG: ${{ github.workspace }}/.kube/config
+      #  with:
+      #    command: run
+      #    resource: test
+      #    parameters: curl -f
+
+      - name: Setup Testkube
+        uses: kubeshop/setup-testkube@v1
+        with:
+          namespace: testkube
+
+      - name: Run test
+        run: |
+          testkube run test czertainly-auth-test -f
