@@ -2,39 +2,55 @@ name: JSON action
 
 on:
   workflow_dispatch:
-    inputs:
-      test-folder:
-        type: string
-        description: 'Test folder to run'
-        required: true
-        default: "{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres:${{ fromJson(inputs.test-folder).include[0].project }}
-        # Provide the password for postgres
-        env:
-          POSTGRES_USER: czertainlyuser
-          POSTGRES_PASSWORD: your-strong-password
-          POSTGRES_DB: czertainlydb
-        ports:
-          - 5432:5432
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        volumes:
-          - ${{ github.workspace }}/initdb:/docker-entrypoint-initdb.d
+    strategy:
+      matrix:
+        test-folder:
+          - 'sample-test'
+          - 'sample-test2'
 
     steps:
-      - name: From JSON
+      # Checks-out only the content of the test folder
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ${{ matrix.test-folder }}
+          sparse-checkout-cone-mode: false
+
+      - name: Load testing variables
+        id: load_variables
         run: |
-          echo "${{ fromJson(inputs.test-folder).include[0].project }}"
+          echo "Loading JSON variables:"
+          cat ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json
+          
+          # load variables into environment
+          while read p; do
+            echo "${{ matrix.test-folder }}=$p" >> $GITHUB_ENV
+          done < ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json
+
+#      - name: Trigger test workflow
+#        uses: actions/github-script@v7
+#        with:
+#          github-token: ${{ secrets.PAT }}
+#          script: |
+#            github.rest.actions.createWorkflowDispatch({
+#              owner: '3KeyCompany',
+#              repo: 'Playground',
+#              workflow_id: 'reusable-test-action.yml',
+#              ref: 'master',
+#              inputs: {
+#                'test-folder': '${{ matrix.test-folder }}'
+#              }
+#            })
+
+  reusable-workflow:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Print variables
+        run: |
+          echo "${{ env.sample-test }}"
