@@ -42,6 +42,10 @@ jobs:
           
           cat test.json
           
+          echo "json<<EOF" >> $GITHUB_OUTPUT
+          echo "$json" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          
           echo '${{ steps.load_variables.outputs.json }}' > output.json
           
           cat output.json
