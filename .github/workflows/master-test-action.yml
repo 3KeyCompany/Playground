@@ -4,13 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  TEST_FOLDERS: "{
-  \"test-folder\":
-    [
-      \"sample-test\",
-      \"sample\"
-    ]
-  }"
+  TEST_FOLDERS: "{\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}"
 
 jobs:
   test:
