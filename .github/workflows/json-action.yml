@@ -16,4 +16,4 @@ jobs:
     steps:
       - name: From JSON
         run: |
-          echo "${{ fromJson(inputs.test-folder) }}"
+          echo "${{ fromJson(inputs.test-folder).include[0].project }}"
