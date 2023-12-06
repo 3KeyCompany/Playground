@@ -36,7 +36,7 @@ jobs:
           
           cat test.json
           
-          echo "$(jq '. += "'$json'"' test.json)" > test.json
+          echo "$(jq '. += "$json"' test.json)" > test.json
           
           cat test.json
           
