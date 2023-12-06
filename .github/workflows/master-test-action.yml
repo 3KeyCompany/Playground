@@ -53,8 +53,11 @@ jobs:
           - 'sample-test'
           - 'sample-test2'
 
+    env:
+      K8S_CLUSTER: ${{ needs.workflow.outputs.K8S_CLUSTER }}
+
     uses: 3KeyCompany/Playground/.github/workflows/reusable-test-action.yml@master
     needs: workflow
     with:
       test-folder: ${{ matrix.test-folder }}
-      K8S_CLUSTER: ${{ needs.workflow.outputs.K8S_CLUSTER }}
+      K8S_CLUSTER: ${{ env.K8S_CLUSTER }}
