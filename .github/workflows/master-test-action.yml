@@ -30,6 +30,6 @@ jobs:
 
       - name: Local Action Call
         id: local-action
-        uses: ${{ github.workspace }}/.github/workflows/reusable-test-action.yml
+        uses: ./.github/workflows/reusable-test-action.yml
         with:
           test-folder: ${{ matrix.test-folder }}
