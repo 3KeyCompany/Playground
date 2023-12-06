@@ -19,9 +19,10 @@ jobs:
           echo "Loading variables:"
           cat ${{ github.workspace }}/sample-test/variables
           source ${{ github.workspace }}/sample-test/variables
+          echo "K8S_CLUSTER: $K8S_CLUSTER"
 
       - name: Create k8s cluster
-        if : ${{ env.K8S_CLUSTER == 'microk8s' }}
+        if : K8S_CLUSTER == 'microk8s'
         uses: balchua/microk8s-actions@v0.3.0
         with:
           channel: '1.26/stable'
