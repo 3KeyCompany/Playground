@@ -22,6 +22,6 @@ jobs:
         test-folder:
           - 'sample-test'
           - 'sample-test2'
-    uses: ./.github/workflows/reusable-workflow.yml@master
+    uses: ./.github/workflows/reusable-test-action.yml@master
     with:
       test-folder: ${{ matrix.test-folder }}
