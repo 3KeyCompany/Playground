@@ -1,0 +1,19 @@
+name: JSON action
+
+on:
+  workflow_dispatch:
+    inputs:
+      test-folder:
+        type: string
+        description: 'Test folder to run'
+        required: true
+        default: '{"test-folder": "sample-test"}'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: From JSON
+        run: |
+          echo "${{ fromJson(inputs.test-folder) }}"
