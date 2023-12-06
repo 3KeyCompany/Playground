@@ -35,7 +35,8 @@ jobs:
           echo "$(jq '.test += ["${{ matrix.test-folder }}"]' test.json)" > test.json
           
           cat test.json
-          json=$(jq -r tostring $json)
+          json=$(echo $json | jq -r tostring)
+          echo "$json"
           
           echo "$(jq '. += "'$json'"' test.json)" > test.json
           
