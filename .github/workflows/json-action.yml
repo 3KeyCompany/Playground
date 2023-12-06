@@ -28,9 +28,11 @@ jobs:
           echo "Loading JSON variables:"
           json=$(cat ${{ github.workspace }}/${{ matrix.test-folder }}/variables.json)
           
-          echo "${{ matrix.test-folder }}<<EOF" >> $GITHUB_OUTPUT
-          echo "$json" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          #echo "${{ matrix.test-folder }}<<EOF" >> $GITHUB_OUTPUT
+          #echo "$json" >> $GITHUB_OUTPUT
+          #echo "EOF" >> $GITHUB_OUTPUT
+          
+          echo "${{ matrix.test-folder }}=$json" >> $GITHUB_OUTPUT
 
 #      - name: Trigger test workflow
 #        uses: actions/github-script@v7
