@@ -1,0 +1,28 @@
+name: Local action
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out only the content of the sample-test folder
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            sample-test
+
+      - name: Load testing variables
+        run: |
+          echo "Loading variables:"
+          cat ${{ github.workspace }}/sample-test/variables
+          source ${{ github.workspace }}/sample-test/variables
+
+      - name: Create k8s cluster
+        if : ${{ env.K8S_CLUSTER == 'microk8s' }}
+        uses: balchua/microk8s-actions@v0.3.0
+        with:
+          channel: '1.26/stable'
+          addons: '["dns", "rbac", "ingress", "hostpath-storage"]'
