@@ -21,6 +21,7 @@ jobs:
           
           # load variables into environment
           while read p; do
+            echo "$p"
             echo "$p" >> "$GITHUB_OUTPUT"
           done < ${{ github.workspace }}/sample-test/variables
 
