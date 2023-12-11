@@ -6,6 +6,7 @@ on:
 jobs:
 
   prepare-variables:
+    name: Running tests - ${{ matrix.test-folder }}
     strategy:
       matrix:
         test-folder:

@@ -11,7 +11,9 @@ on:
 run-name: Prepare variables - ${{ inputs.test-folder }}
 
 jobs:
+
   test:
+    name: Prepare variables - ${{ inputs.test-folder }}
     runs-on: ubuntu-latest
     outputs:
       configuration: ${{ steps.load_variables.outputs.configuration }}
