@@ -25,9 +25,10 @@ jobs:
       - name: Load testing variables
         id: load_variables
         run: |
-          echo "$(jq '. += {"test-folder":"${{ inputs.test-folder }}"}' variables.json)" > variables.json
+          $variables_file = ${{ github.workspace }}/${{ inputs.test-folder }}/variables.json
+          echo "$(jq '. += {"test-folder":"${{ inputs.test-folder }}"}' $variables_file)" > $variables_file
           echo "Loading JSON variables:"
-          json=$(cat ${{ github.workspace }}/${{ inputs.test-folder }}/variables.json)
+          json=$(cat $variables_file)
           
           echo "configuration<<EOF" >> $GITHUB_OUTPUT
           echo "$json" >> $GITHUB_OUTPUT
