@@ -29,6 +29,7 @@ jobs:
           echo "$(jq '. += {"test-folder":"${{ inputs.test-folder }}"}' $variables_file)" > $variables_file
           echo "Loading JSON variables:"
           json=$(cat $variables_file)
+          echo "$json"
           
           echo "configuration<<EOF" >> $GITHUB_OUTPUT
           echo "$json" >> $GITHUB_OUTPUT
