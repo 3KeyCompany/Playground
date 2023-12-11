@@ -1,14 +1,14 @@
 name: Reusable test action
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
-      test-folder:
+      configuration:
         type: string
-        description: 'Test folder to run'
+        description: 'Configuration for the test run'
         required: true
 
-run-name: Run test action - ${{ inputs.test-folder }}
+run-name: Run test action - ${{ fromJson(inputs.configuration).test-folder }}
 
 jobs:
   test:
@@ -47,21 +47,11 @@ jobs:
       # Checks-out only the content of the test folder
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: ${{ inputs.test-folder }}
+          sparse-checkout: ${{ fromJson(inputs.configuration).test-folder }}
           sparse-checkout-cone-mode: false
 
-      - name: Load testing variables
-        run: |
-          echo "Loading variables:"
-          cat ${{ github.workspace }}/${{ inputs.test-folder }}/variables
-          
-          # load variables into environment
-          while read p; do
-            echo "$p" >> $GITHUB_ENV
-          done < ${{ github.workspace }}/${{ inputs.test-folder }}/variables
-
       - name: Create k8s cluster
-        if : env.K8S_CLUSTER == 'microk8s'
+        if : ${{ fromJson(inputs.configuration).k8s-cluster.dist }} == 'microk8s'
         uses: balchua/microk8s-actions@v0.3.0
         with:
           channel: '1.26/stable'
@@ -80,7 +70,7 @@ jobs:
 
       - name: Install CZERTAINLY
         env:
-          CZERTAINLY_VERSION: ${{ env.CZERTAINLY_VERSION }}
+          CZERTAINLY_VERSION: ${{ fromJson(inputs.configuration).czertainly.version }}
         run: |
           echo "Installing CZERTAINLY version $CZERTAINLY_VERSION"
           kubectl create namespace czertainly
@@ -96,7 +86,7 @@ jobs:
 
       - name: Create Testkube CRDs
         run: |
-          kubectl apply -f ${{ github.workspace }}/${{ inputs.test-folder }}/test-crds/
+          kubectl apply -f ${{ github.workspace }}/${{ fromJson(inputs.configuration).test-folder }}/test-crds/
 
       # Running test
       #- name: Run tests

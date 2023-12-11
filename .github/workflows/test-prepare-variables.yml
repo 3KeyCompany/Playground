@@ -36,10 +36,8 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
   reusable-workflow:
-    runs-on: ubuntu-latest
     needs: test
-
-    steps:
-      - name: Print variables
-        run: |
-          echo '${{ needs.test.outputs.configuration }}'
+    uses: 3KeyCompany/Playground/.github/workflows/reusable-test-action.yml@master
+    with:
+      configuration: ${{ needs.test.outputs.configuration }}
+    secrets: inherit

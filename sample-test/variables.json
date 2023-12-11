@@ -1,5 +1,11 @@
 {
-  "K8S_CLUSTER": "microk8s",
-  "POSTGRESQL_VERSION": "15",
-  "CZERTAINLY_VERSION": "2.10.0"
+  "k8s-cluster": {
+    "dist": "microk8s"
+  },
+  "postgresql": {
+    "version": 15
+  },
+  "czertainly": {
+    "version": "2.10.0"
+  }
 }
