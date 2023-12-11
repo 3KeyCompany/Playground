@@ -8,6 +8,8 @@ on:
         description: 'Test folder to run'
         required: true
 
+run-name: Prepare variables - ${{ inputs.test-folder }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -23,7 +25,7 @@ jobs:
       - name: Load testing variables
         id: load_variables
         run: |
-          echo "$(jq '. += {"test-folder":'${{ inputs.test-folder }}'}' variables.json)" > variables.json
+          echo "$(jq '. += {"test-folder":"${{ inputs.test-folder }}"}' variables.json)" > variables.json
           echo "Loading JSON variables:"
           json=$(cat ${{ github.workspace }}/${{ inputs.test-folder }}/variables.json)
           
