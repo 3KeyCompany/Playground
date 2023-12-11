@@ -1,0 +1,41 @@
+name: Test prepare variables
+
+on:
+  workflow_call:
+    inputs:
+      test-folder:
+        type: string
+        description: 'Test folder to run'
+        required: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    outputs:
+      configuration: ${{ steps.load_variables.outputs.configuration }}
+    steps:
+      # Checks-out only the content of the test folder
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ${{ inputs.test-folder }}
+          sparse-checkout-cone-mode: false
+
+      - name: Load testing variables
+        id: load_variables
+        run: |
+          echo "$(jq '. += {"test-folder":'${{ inputs.test-folder }}'}' variables.json)" > variables.json
+          echo "Loading JSON variables:"
+          json=$(cat ${{ github.workspace }}/${{ inputs.test-folder }}/variables.json)
+          
+          echo "configuration<<EOF" >> $GITHUB_OUTPUT
+          echo "$json" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  reusable-workflow:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Print variables
+        run: |
+          echo '${{ needs.test.outputs.configuration }}'

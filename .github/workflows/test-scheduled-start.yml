@@ -1,0 +1,17 @@
+name: Test scheduled start
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  prepare-variables:
+    strategy:
+      matrix:
+        test-folder:
+          - 'sample-test'
+          - 'sample-test-2'
+    uses: 3KeyCompany/Playground/.github/workflows/test-prepare-variables.yml@master
+    with:
+      test-folder: ${{ matrix.test-folder }}
+    secrets: inherit
