@@ -16,6 +16,9 @@ jobs:
     name: Run test action - ${{ fromJson(inputs.configuration).test-folder }}
     runs-on: ubuntu-latest
 
+    strategy:
+
+
     services:
       # Label used to access the service container
       postgres:
